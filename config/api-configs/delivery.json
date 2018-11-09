@@ -1,0 +1,68 @@
+{
+    "port" : {
+        "api" : {
+            "production": 8000,
+            "development": 8000
+        },
+        "processor" : {
+            "production": 3000,
+            "development": 2000
+        },
+        "callback" : {
+            "production": 5000,
+            "development": 6000
+        }
+    },
+    "standard_response": {
+        "track_id": "",
+        "error": false,
+        "msg": "unknown"
+    },
+    "response_status": {
+        "0" : "order received",
+        "1" : "product packed",
+        "2" : "shiped",
+        "3" : "out for delivery",
+        "4" : "delivered",
+        "101" : "api key issue",
+        "102" : "unable to calculate data",
+        "103" : "api key update issue",
+        "104" : "callback queue pushing issue",
+        "105" : "unable to request callback url",
+        "106" : "unknown"
+    },
+    "rabbit_mq": {
+        "queues": {
+            "order": "order_queue"
+        },
+        "credential_url":{
+            "local" : "amqp://guest:guest@localhost:5672",
+            "explorer": "amqp://gremlin:svgremlin123@54.38.68.9:5672"
+        }
+    },
+    "database": {
+        "mongo": {
+            "local": {
+                "url": "mongodb://arjun_singh707:nWpa1Z11MgNEeArk@cluster0-shard-00-00-mxba5.mongodb.net:27017,cluster0-shard-00-01-mxba5.mongodb.net:27017,cluster0-shard-00-02-mxba5.mongodb.net:27017/product_delivery?ssl=true&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true",
+                "host": "cluster0-shard-00-00-mxba5.mongodb.net",
+                "username": "arjun_singh707",
+                "password": "nWpa1Z11MgNEeArk",
+                "auth_db": "product_delivery",
+                "port": "27017"
+            }
+        }
+    },
+    "redis": {
+        "local": {
+            "host": "127.0.0.1", 
+            "port": 6379
+        }
+    },
+    "design_msg" : {
+        "calculator": "\n************************************************** ORDER RECEIVED **************************************************\nORDER ID : ",
+        "callback": "\n************************************************** ORDER STATUS RECEIVED **************************************************\nORDER ID : "
+    },
+    "run" : "dev",
+    "shell": "mongo --host Cluster0-shard-0/cluster0-shard-00-00-mxba5.mongodb.net:27017,cluster0-shard-00-01-mxba5.mongodb.net:27017,cluster0-shard-00-02-mxba5.mongodb.net:27017 --username arjun_singh707 --password nWpa1Z11MgNEeArk --authenticationDatabase admin ",
+    "hmset": "hmset currently_free_agent 1 0 2 0 3 0 4 0 5 0 6 0 7 0 8 0 9 0 10 0 11 0 12 0 13 0 14 0 15 0 16 0 17 0 18 0 19 0 20 0 "
+}
