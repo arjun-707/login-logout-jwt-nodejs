@@ -45,23 +45,43 @@ startServer = (listenPort, services) => {
         console.log("Service Running:  " + services.join(","));
     });
 }
-/* if (cluster.isMaster) {
-    let numAlexaReqs = numAlexaStat = numAlexaGet = 0;
+if (cluster.isMaster) {
+    let notifyOrderRequest = 0, notifyOrderRequestErr = 0, notifyOrderStatus = 0, notifyOrderStatusErr = 0, notifyOrderUpdateStatus = 0, notifyOrderUpdateStatusErr = 0, notifyOrderUpdateLocation = 0, notifyOrderUpdateLocationErr = 0;
     // Count requests
     function messageHandler(msg) {
         if (msg.cmd) {
             switch (msg.cmd) {
-                case 'notifyAlexaRequest':
-                    numAlexaReqs += 1;
-                    console.log(`alexa 'request' count = ${numAlexaReqs}`);
+                case 'notifyOrderRequest':
+                    notifyOrderRequest += 1;
+                    console.log(`order 'request' count = ${notifyOrderRequest}`);
                 break;
-                case 'notifyAlexaStatus':
-                    numAlexaStat += 1;
-                    console.log(`alexa 'status' count = ${numAlexaStat}`);
+                case 'notifyOrderRequestErr':
+                    notifyOrderRequestErr += 1;
+                    console.log(`order 'request error' count = ${notifyOrderRequestErr}`);
                 break;
-                case 'notifyAlexaGet':
-                    numAlexaGet += 1;
-                    console.log(`alexa 'get' count = ${numAlexaGet}`);
+                case 'notifyOrderStatus':
+                    notifyOrderStatus += 1;
+                    console.log(`order 'status' count = ${notifyOrderStatus}`);
+                break;
+                case 'notifyOrderStatusErr':
+                    notifyOrderStatusErr += 1;
+                    console.log(`order 'status error' count = ${notifyOrderStatusErr}`);
+                break;
+                case 'notifyOrderUpdateStatus':
+                    notifyOrderUpdateStatus += 1;
+                    console.log(`order 'status update' count = ${notifyOrderUpdateStatus}`);
+                break;
+                case 'notifyOrderUpdateStatusErr':
+                    notifyOrderUpdateStatusErr += 1;
+                    console.log(`order 'status update error' count = ${notifyOrderUpdateStatusErr}`);
+                break;
+                case 'notifyOrderUpdateLocation':
+                    notifyOrderUpdateLocation += 1;
+                    console.log(`order 'location update' count = ${notifyOrderUpdateLocation}`);
+                break;
+                case 'notifyOrderUpdateLocationErr':
+                    notifyOrderUpdateLocationErr += 1;
+                    console.log(`order 'location update error' count = ${notifyOrderUpdateLocationErr}`);
                 break;
             }
         }
@@ -69,7 +89,7 @@ startServer = (listenPort, services) => {
     const numCPUs = require('os').cpus().length;
     
     // Fork workers.
-    for (let i = 0; i < numCPUs; i++)
+    for (let i = 0; i < 2; i++)
         cluster.fork();
     for (const id in cluster.workers)
         cluster.workers[id].on('message', messageHandler);
@@ -78,7 +98,7 @@ startServer = (listenPort, services) => {
         console.log(`worker ${worker.process.pid} died`);
     });
 } 
-else { */
+else {
     if (SERVICES.length < 1) {
         console.error('Service name not defined in config');
         process.exit();
@@ -99,4 +119,4 @@ else { */
         else
             startServer(port, SERVICES);
     }
-/* } */
+}
