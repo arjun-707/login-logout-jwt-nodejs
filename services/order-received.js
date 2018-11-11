@@ -45,13 +45,14 @@ cron.schedule("* * * * * *", async () => {
         SELECTED = 0
     try {
         var consumedData = await exporter.rabbitmqMessageConsume(ORDER_QUEUE) // consume data from queue
-        consumedData = JSON.parse(consumedData.content.toString())
     }
     catch(rbmqError) {
         console.error(`RabbitMQ Consume Error : ${rbmqError}`)
         exporter.logNow(`RabbitMQ Consume Error : ${rbmqError}`, 250)
         rbmqError = null
     }
+
+    consumedData = JSON.parse(consumedData.content.toString())
     if (consumedData && typeof consumedData === 'object' && consumedData.hasOwnProperty('order_id')) { 
         
         console.log(`${WORKER_MSG} ${consumedData.order_id}`)
@@ -135,6 +136,7 @@ cron.schedule("* * * * * *", async () => {
                     let agentWorkDetailMongo = new agentWorkDetailSchema({ 
                         agent_id: chosenAgent,
                         order_id: consumedData.order_id,
+                        product_id: consumedData.product_id,
                         source_address: consumedData.source,
                         destination_address: consumedData.destination
                     });

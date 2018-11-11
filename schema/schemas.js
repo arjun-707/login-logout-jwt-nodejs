@@ -26,6 +26,7 @@ module.exports = {
         coll_name: 'agent_work_info',
         schema: {
             agent_id: { type: String, required: true },
+            product_id: { type: String, default: true },
             order_id: { type: String, default: true },
             location: { type: String, default: null },
             status: { type: Number, default: 0 },

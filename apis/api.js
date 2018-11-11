@@ -104,7 +104,7 @@ express_route.post('/order/request', async (req, res) => {
         try {
             lastDoc = {
                 order_id: lastDoc._id, 
-                product_id: PRODUCTS[product_id],
+                product_id: product_id,
                 source: param.source,
                 destination: param.destination
             } 
