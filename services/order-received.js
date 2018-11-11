@@ -43,6 +43,7 @@ cron.schedule("* * * * * *", async () => {
     
     if (SELECTED > 20) // 20 is default value for order count to each agent
         SELECTED = 0
+    var consumedData = false;
     try {
         var consumedData = await exporter.rabbitmqMessageConsume(ORDER_QUEUE) // consume data from queue
     }
@@ -51,114 +52,120 @@ cron.schedule("* * * * * *", async () => {
         exporter.logNow(`RabbitMQ Consume Error : ${rbmqError}`, 250)
         rbmqError = null
     }
+    if (consumedData) {
+        consumedData = JSON.parse(consumedData.content.toString())        
+        if (consumedData && typeof consumedData === 'object' && consumedData.hasOwnProperty('order_id')) { 
+            
+            console.log(`${WORKER_MSG} ${consumedData.order_id}`)
+            
+            var inputForRedis = []
+            var chosenAgent = false
+            SELECTED++
 
-    consumedData = JSON.parse(consumedData.content.toString())
-    if (consumedData && typeof consumedData === 'object' && consumedData.hasOwnProperty('order_id')) { 
-        
-        console.log(`${WORKER_MSG} ${consumedData.order_id}`)
-        
-        var inputForRedis = []
-        var chosenAgent = false
-        SELECTED++
-
-        try {
-            var fetchedAgent = await exporter.getKeysFromRedis('currently_free_agent')
-            for (let key in fetchedAgent) {
-                if (parseInt(fetchedAgent[key]) < 20 && SELECTED == parseInt(key)) {
-                    let incr = parseInt(fetchedAgent[key]) + 1
-                    chosenAgent = key
-                    inputForRedis.push(key)
-                    inputForRedis.push(incr.toString())
-                }
-                else {
-                    inputForRedis.push(key)
-                    inputForRedis.push(fetchedAgent[key])
+            try {
+                var fetchedAgent = await exporter.getKeysFromRedis('currently_free_agent')
+                for (let key in fetchedAgent) {
+                    if (parseInt(fetchedAgent[key]) < 20 && SELECTED == parseInt(key)) {
+                        let incr = parseInt(fetchedAgent[key]) + 1
+                        chosenAgent = key
+                        inputForRedis.push(key)
+                        inputForRedis.push(incr.toString())
+                    }
+                    else {
+                        inputForRedis.push(key)
+                        inputForRedis.push(fetchedAgent[key])
+                    }
                 }
             }
-        }
-        catch(redisError) {
-            console.error(`Redis Fetch Error : ${redisError}`)
-            exporter.logNow(`Redis Fetch Error : ${redisError}`, 250)
-            redisError = null
-        }
-        if (chosenAgent) {
+            catch(redisError) {
+                console.error(`Redis Fetch Error : ${redisError}`)
+                exporter.logNow(`Redis Fetch Error : ${redisError}`, 250)
+                redisError = null
+            }
+            if (chosenAgent) {
 
-            if (inputForRedis.length > 1) {
-                
-                // assign agent to order updated in redis
-                try {                    
-                    await exporter.setMultiKeyValuesIntoRedis(
-                        consumedData.order_id, 
-                        ['agent', SELECTED, 'status', '1'])
-                }
-                catch(redisError) {
-                    console.error(`Redis Update Error : ${redisError}`)
-                    exporter.logNow(`Redis Update Error : ${redisError}`, 250)
-                    redisError = null
-                }
+                if (inputForRedis.length > 1) {
                     
-                /**** 
-                    -------- CODE HERE TO SEND ALERT TO AGENT --------
-                    Push data into email_agent queue of rabbit which will be picked by email sending service
-                    -> agent email
-                    -> agent id
-                    -> product
-                    -> pickup address
-                    -> delivery address
-                *****/
-                
-                // update agent total deliver count of selected agent
-                try {                    
-                    await exporter.setMultiKeyValuesIntoRedis('currently_free_agent', inputForRedis)
+                    // assign agent to order updated in redis
+                    try {                    
+                        await exporter.setMultiKeyValuesIntoRedis(
+                            consumedData.order_id, 
+                            ['agent', SELECTED, 'status', '1'])
+                    }
+                    catch(redisError) {
+                        console.error(`Redis Update Error : ${redisError}`)
+                        exporter.logNow(`Redis Update Error : ${redisError}`, 250)
+                        redisError = null
+                    }
+                        
+                    /**** 
+                        -------- CODE HERE TO SEND ALERT TO AGENT --------
+                        Push data into email_agent queue of rabbit which will be picked by email sending service
+                        -> agent email
+                        -> agent id
+                        -> product
+                        -> pickup address
+                        -> delivery address
+                    *****/
+                    
+                    // update agent total deliver count of selected agent
+                    try {                    
+                        await exporter.setMultiKeyValuesIntoRedis('currently_free_agent', inputForRedis)
+                    }
+                    catch(redisError) {
+                        console.error(`Redis Update Error : ${redisError}`)
+                        exporter.logNow(`Redis Update Error : ${redisError}`, 250)
+                        redisError = null
+                    }
+                    
+                    // update status in order collection
+                    try {
+                        await orderSchema.findByIdAndUpdate(
+                            { _id: consumedData.order_id }, 
+                            { agent_id: chosenAgent, status: 1 }, 
+                            { multi: false }
+                        )
+                    }
+                    catch(mongoError) {
+                        console.error(`Mongo Update Error : ${mongoError}`)
+                        exporter.logNow(`Mongo Update Error : ${mongoError}`, 250)
+                        mongoError = null
+                    }
+                    
+                    // insert agent detail in agent_work_info collection
+                    try {                    
+                        let agentWorkDetailMongo = new agentWorkDetailSchema({ 
+                            agent_id: chosenAgent,
+                            order_id: consumedData.order_id,
+                            product_id: consumedData.product_id,
+                            source_address: consumedData.source,
+                            destination_address: consumedData.destination
+                        });
+                        await agentWorkDetailMongo.save(); // saving into database
+                    }
+                    catch(mongoError) {
+                        console.error(`Mongo Update Error : ${mongoError}`)
+                        exporter.logNow(`Mongo Update Error : ${mongoError}`, 250)
+                        mongoError = null
+                    }
                 }
-                catch(redisError) {
-                    console.error(`Redis Update Error : ${redisError}`)
-                    exporter.logNow(`Redis Update Error : ${redisError}`, 250)
-                    redisError = null
-                }
-                
-                // update status in order collection
-                try {
-                    await orderSchema.findByIdAndUpdate(
-                        { _id: consumedData.order_id }, 
-                        { agent_id: chosenAgent, status: 1 }, 
-                        { multi: false }
-                    )
-                }
-                catch(mongoError) {
-                    console.error(`Mongo Update Error : ${mongoError}`)
-                    exporter.logNow(`Mongo Update Error : ${mongoError}`, 250)
-                    mongoError = null
-                }
-                
-                // insert agent detail in agent_work_info collection
-                try {                    
-                    let agentWorkDetailMongo = new agentWorkDetailSchema({ 
-                        agent_id: chosenAgent,
-                        order_id: consumedData.order_id,
-                        product_id: consumedData.product_id,
-                        source_address: consumedData.source,
-                        destination_address: consumedData.destination
-                    });
-                    await agentWorkDetailMongo.save(); // saving into database
-                }
-                catch(mongoError) {
-                    console.error(`Mongo Update Error : ${mongoError}`)
-                    exporter.logNow(`Mongo Update Error : ${mongoError}`, 250)
-                    mongoError = null
+                else {
+                    console.log(`input array issue ${inputForRedis}`)
                 }
             }
             else {
-                console.log(`input array issue ${inputForRedis}`)
+                console.log(`all agents are occupied`)
+                /*
+                    -------  CODE HERE TO SEND ALERT TO MANAGEMENT OF THE APPLICATION --------
+                    Push data into error_email_agent queue of rabbit which will be picked by error_email sending service
+                 */
             }
         }
-        else {
-            console.log(`all agents are occupied`)
-            /*
-                -------  CODE HERE TO SEND ALERT TO MANAGEMENT OF THE APPLICATION --------
-                Push data into error_email_agent queue of rabbit which will be picked by error_email sending service
-             */
-        }
+    }
+    else {
+        setTimeout(() => {
+           console.log('waiting...')
+        }, 5000);
     }
 })
 
