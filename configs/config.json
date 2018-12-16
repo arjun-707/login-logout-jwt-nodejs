@@ -1,0 +1,21 @@
+{
+	"application": {
+		"name": "user_auth",
+		"version": "1.0.0"
+	},
+
+	"mongo": {
+		"local" : {
+			"host": "",
+			"port": 27017,
+			"username": "",
+			"password": "",
+			"database": "",
+			"authDB": "",
+			"url": "mongodb://localhost:27017/auth"
+		}
+	},
+	"jwt" : {
+		"token": "3hkjf5328667df6ml2dsfbmmqRCKJ06817iamwolrd"
+	}
+}

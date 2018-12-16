@@ -1,0 +1,36 @@
+<html>
+  <body>
+    <form ref='uploadForm' id='uploadForm' method='post' encType="multipart/form-data">
+        <input type="file" name="profile_pic" id="profile_pic"/>
+        <input type='button' value='Upload!' id="btn_upload" />
+    </form>     
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script>
+    $(document).ready(function(){
+      $("#btn_upload").click(function(){
+        var data = new FormData();
+        data.append('profile_pic', $('#profile_pic')[0].files[0]);
+        $.ajax({
+            url: "http://localhost:3000/user/pic-upload",
+            type: 'POST',
+            headers: {
+                "authorization":"token eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1YzE2OWM2NWE0ZWU3NzBiYjNjYmM2ZjQiLCJleHAiOjE1NDU1OTA1NDksImlhdCI6MTU0NDk4NTc0OX0.drA5ufMZKcVP4kCbBsoOkgPETzvLzt8xLW2QR_Hilh8"
+            },
+            data: data,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function(result){
+                $('#profile_pic').val('');
+                alert('file uploaded')
+            },
+            error: function(err) {
+                console.log(err)
+                alert('error: see in console')
+            }
+        });
+      });
+    });
+    </script>
+</html>
