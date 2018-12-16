@@ -15,7 +15,30 @@
 			"url": "mongodb://localhost:27017/auth"
 		}
 	},
+    "redis": {
+        "local": {
+            "host": "127.0.0.1", 
+            "port": 6379
+        }
+    },
 	"jwt" : {
-		"token": "3hkjf5328667df6ml2dsfbmmqRCKJ06817iamwolrd"
+		"token": [
+			"Aerhsdf=-235GDOIr7rzaSyAKGxcxIM-3ogUd74c57LMa0ikv2SomxQ",
+			"cxgfj76AIzaSyCPK46xitVJAG0IB-TBfbT8fjAwZ1v2DX8",
+			"3nAIzaSyCRdFbBMFa+5gAciAkNR1JJOJnIhW-YofeE4",
+			"vbn7878AI23+-zaSyBzYOCzlUVmqM2k807Y95FNDwd7MSPMCHw",
+			"CVBA324dsfIzaSyAQMWNbbeYD6_nywRMVqv3tBZ0FAY2KYMI",
+			"$GH&*AIzaSyCaI_TFQgWNjmNvAJ1pNfpmUFmBDVhJNmk",
+			"YTREIzaSyBZ7Dtcc-RRwHwSJ1_GG-rLnlSC1Ro0dyI",
+			"VCH345cdAIwqirjzaSyAhx3tuViQfnP_IGmZYkhVPWrPg4OAr9ho",
+			"fghGIUWAIzaSysdfijBKZ95f6cHV-axnxPfIk0t5_KKOClPWgI8",
+			"jkhbsdkfAskdfIzaSyCSJ4jnel4vJv-yrQ_fp7iyKX0iVm--OZM",
+			"xcjgYHCOPA023IzaSyDkJU_bKZefDY5IwE-sSsWsJVmFpICn78E",
+			"876132454dsgAIzaSyBGdzXWbcfPQC4edkMOcmr0sY8pv05F8hQ",
+			"AweporIzaSyDpSEx7wbhDIofkzawEv7mrlfaZjIROpI4",
+			"CFVAdsfdsI+IUKHkjhewkrzaSyDAM-vp7MSEWRPiUJjZTOL0TVIkqwiDnU0",
+			"PLMjdf3453Asdf34dfsIzaSD+FGHyAxP7C38U5zZFFRzXejDBy5Qvo437ldH1o",
+			"QARPOkjdskf-3hkjf5328667df6ml2dsfbmmqRCKJ06817iamwolrd"
+		]
 	}
 }
