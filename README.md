@@ -2,11 +2,11 @@
 
 # Description
 This app includes following things:
-- user registration (password uses bcrypt)
-- login through (passport and jwt authentication)
-- set password (bcrypt and jwt authencation)
-- view profile (jwt authentication)
-- profile pic upload (jwt authencation)
+- user registration (password uses bcrypt) `http://localhost:3000/user/register`
+- login through (passport and jwt authentication) `http://localhost:3000/user/login`
+- set password (bcrypt and jwt authencation) `http://localhost:3000/user/set-pwd`
+- view profile (jwt authentication) `http://localhost:3000/user/view`
+- profile pic upload (jwt authencation) `http://localhost:3000/user/pic-upload`
 
 # Requirements
 - MongoDB (3*)
