@@ -1,5 +1,5 @@
 const passport = require('passport')
-const fs = require('fs')
+const request = require('request')
 const expRoute = require('express').Router();
 let exporter = process.exporter;
 
@@ -96,6 +96,7 @@ expRoute.post('/login', (req, res, next) => {
 })
 expRoute.get('/logout', exporter.authenticateToken, (req, res) => {
     let param = req.bearerToken
+    console.log(param)
     if (typeof param == 'string' && param.length > 0) {
         exporter.setHashKeyValuesIntoRedis('expired_token', [param, true])
         .then(() => {
@@ -157,15 +158,44 @@ expRoute.post('/set-pwd', exporter.authenticateToken, (req, res) => {
             }
             process.USER.findByIdAndUpdate(param.tokenId, options) // mongo find and update
             .then((data) => {
-                res.status(200).json({
-                    result: {
-                        email: data.email
-                    },
-                    msg: 'password reset successfully'
-                })
+                let clientServerOptions = {
+                    uri: req.protocol + '://' + req.get('host') + '/' + process.logoutURL,
+                    method: 'GET',
+                    headers: {
+                        'authorization': 'bearer '+req.bearerToken
+                    }
+                }
+                
+                request(clientServerOptions, (err, response) => {
+                    if (err) {
+                        console.log(err)
+                        res.status(400).json({
+                            result: {
+                                email: data.email
+                            },
+                            msg: 'password reset successfully but error occured while logout'
+                        })
+                    }
+                    else {
+                        if (response.statusCode == 200)
+                            res.status(200).json({
+                                result: {
+                                    email: data.email
+                                },
+                                msg: 'password reset successfully'
+                            })
+                        else
+                            res.status(400).json({
+                                result: {
+                                    email: data.email
+                                },
+                                msg: 'password reset successfully but logout says bad request'
+                            })
+                    }
+                });
             })
-            .catch((err) => {
-                console.log(err)
+            .catch((mongoErr) => {
+                exporter.logNow(`USER Mongo Update Error: ${mongoErr}`)
                 res.status(400).json({
                     msg: 'user not found'
                 })
