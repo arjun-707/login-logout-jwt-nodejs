@@ -9,16 +9,6 @@ require('./configs/passport')
 
 const app = express()
 
-// Enable CORS
-/* let cors_options = 
-{
-  "origin": "*",
-  "methods": "GET",
-  "preflightContinue": false,
-  "optionsSuccessStatus": 204
-}
-const cors = require('cors')(cors_options);
- */
 const cors = require('cors')
 app.use(cors());
 app.use(bodyParser.json())

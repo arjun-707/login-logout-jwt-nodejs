@@ -7,7 +7,7 @@ passport.use(
     new LocalStrategy({ usernameField: 'email', passwordField: 'password' }, (email, password, done) => {
         process.USER.findOne({ email: email })
         .then((userInfo) => {
-            if (process.exporter.isObjectValid(userInfo, '_id', true)) {
+            if (userInfo && process.exporter.isObjectValid(userInfo, '_id', true)) {
                 if (!process.exporter.verifyPassword(password, userInfo.password)) 
                     return done(null, false, { msg : 'invalid password' })
                 else
@@ -16,8 +16,9 @@ passport.use(
             else
                 return done(null, false, { msg : 'user not found' })
         })
-        .catch(() => {
-            return done(`Mongo Find Error: ${mongoError}`)
+        .catch((mongoError) => {
+            process.exporter.logNow(`Mongo Find Error: ${mongoError}`)
+            return done(`Unable to find data`)
         })
     })
 )
