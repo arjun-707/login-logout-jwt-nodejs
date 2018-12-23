@@ -23,3 +23,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+*.jpg
+*.png
+*.gif
+*.mp3
+*.mkv
+*.bmp
