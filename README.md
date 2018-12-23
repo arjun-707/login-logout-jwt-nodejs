@@ -1,7 +1,7 @@
 
 ## Login-logout Using passport and JWT in NodeJS ##
 
-** Description **
+# Description
 This module is a common module for a website. As we all know that a website has: user registration, login, logout, password reset, etc sections.
 
 This app includes following APIs:
