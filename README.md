@@ -47,7 +47,7 @@ This app includes following APIs:
   ```
   ###### Body part:
   ```
-    profile_pic: YOUR_IMAGE
+    profile_pic: YOUR_FILE_INPUT_IMAGE
   ```
 - logout and refresh token `http://localhost:3000/user/logout`: A GET method which will store the provided token via header into redis so for the next time when user sends the same token then it will first check into redis and give response accordingly.
 
