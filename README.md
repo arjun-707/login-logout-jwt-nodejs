@@ -74,4 +74,4 @@ This app includes following APIs:
 login-logout-jwt-nodejs/public/ProfilePhotoDir/test.html
 
 **App Execution**
-- `node index.js`
+- `nodemon index.js`
