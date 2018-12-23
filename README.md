@@ -16,7 +16,7 @@ This app includes following APIs:
     phone:    7887978728
     address:  H.No.23, ABC block, Delhi, India
   ```
-- **login `http://localhost:3000/user/login` :  This will require data in POST request and will return a token which you need to attach in header with every request
+- **login** `http://localhost:3000/user/login` :  This will require data in POST request and will return a token which you need to attach in header with every request
 
   ###### Body part:
   ```
