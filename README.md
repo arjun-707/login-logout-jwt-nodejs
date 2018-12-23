@@ -13,7 +13,7 @@ This app includes following APIs:
 - profile pic upload `http://localhost:3000/user/pic-upload` : This will require a token passed in header and data in post request
 - logout and refresh token `http://localhost:3000/user/logout`: A GET method which will store the provided token via header into redis so for the next time when user sends the same token then it will first check into redis and give response accordingly. 
 
-Note : There is a cron which will continously verify the token stored in redis using JWT verify function. Open new tab in your terminal and travel to the directory 'login-logout-jwt-nodejs' and run `nodemon services/token-refresh.js`
+###### Note : There is a cron which will continously verify the token stored in redis using JWT verify function. Open new tab in your terminal and travel to the directory 'login-logout-jwt-nodejs' and run `nodemon services/token-refresh.js`
 
 **Requirements**
 - MongoDB (3*)
