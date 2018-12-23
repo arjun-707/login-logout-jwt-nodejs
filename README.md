@@ -59,9 +59,9 @@ This app includes following APIs:
     ###### Note : There is a cron which will continously verify the token stored in redis using JWT verify function. Open new tab in your terminal and travel to the directory 'login-logout-jwt-nodejs' and run `nodemon services/token-refresh.js`
 
 **Requirements**
-- MongoDB (3*)
+- <a href="https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-18-04">MongoDB (3*)</a>
 - <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04">Redis</a>
-- NodeJS (10*)
+- <a href="https://tecadmin.net/install-latest-nodejs-npm-on-ubuntu/">NodeJS (10*)</a>
 
 **Do following things before running the app**
 - make a Database (`auth`) in MongoDB
