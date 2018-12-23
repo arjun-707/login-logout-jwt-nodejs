@@ -24,3 +24,6 @@ Note : There is a cron which will continously verify the token stored in redis u
 - Setup your config as required (`configs/config.json`)
 - run command `npm install` to install all the dependencies
 - install nodemon globally if you want to run your app on `watch` (`npm install -g nodemon`)
+
+# For help see page
+login-logout-jwt-nodejs/public/ProfilePhotoDir/test.html
