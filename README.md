@@ -5,8 +5,8 @@
 This module is a common module for a website. As we all know that a website has: user registration, login, logout, password reset, etc sections.
 
 This app includes following APIs:
-- user registration `http://localhost:3000/user/register`: This will require data in post request
-- login `http://localhost:3000/user/login` : This will return a token which you need to send in header in every request after logged in
+- user registration `http://localhost:3000/user/register`: This will require data in POST request
+- login `http://localhost:3000/user/login` :  This will require data in POST request and will return a token which you need to attach in header with every request
 - set password `http://localhost:3000/user/set-pwd` : This will require a token passed in header and data in post request
 - view profile `http://localhost:3000/user/view` : This will require a token passed in header and data in post request
 - profile pic upload `http://localhost:3000/user/pic-upload` : This will require a token passed in header and data in post request
