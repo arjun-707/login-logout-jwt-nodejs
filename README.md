@@ -8,7 +8,7 @@ This module is a common module for a website. As we all know that a website has:
 This app includes following APIs:
 - **user registration** `http://localhost:3000/user/register`: This will require data in POST request
 
-  **Body part:**
+  ###### Body part:
   ```
     email:    test@example.com
     password: qwerty
@@ -16,42 +16,42 @@ This app includes following APIs:
     phone:    7887978728
     address:  H.No.23, ABC block, Delhi, India
   ```
-- **login** `http://localhost:3000/user/login` :  This will require data in POST request and will return a token which you need to attach in header with every request
+- **login `http://localhost:3000/user/login` :  This will require data in POST request and will return a token which you need to attach in header with every request
 
-  **Body part:**
+  ###### Body part:
   ```
     email:    test@example.com
     password: qwerty
   ```
 - **set password** `http://localhost:3000/user/set-pwd` : This will require a token passed in header and data in POST request
 
-  **Header part:**
+  ###### Header part:
   ```
     authorization:    YOUR_TOKEN_HERE
   ```
-  **Body part:**
+  ###### Body part:
   ```
     password: example
   ```
 - **view profile** `http://localhost:3000/user/view` : This will require a token passed in header and data in POST request
 
-  **Header part:**
+  ###### Header part:
   ```
     authorization:    YOUR_TOKEN_HERE
   ```
 - **profile pic upload** `http://localhost:3000/user/pic-upload` : This will require a token passed in header and data in POST request
 
-  **Header part:**
+  ###### Header part:
   ```
     authorization:    YOUR_TOKEN_HERE
   ```
-  **Body part:**
+  ###### Body part:
   ```
     profile_pic: YOUR_IMAGE
   ```
 - logout and refresh token `http://localhost:3000/user/logout`: A GET method which will store the provided token via header into redis so for the next time when user sends the same token then it will first check into redis and give response accordingly.
 
-  **Header part:**
+  ###### Header part:
   ```
     authorization:    YOUR_TOKEN_HERE
   ```
