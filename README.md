@@ -72,3 +72,6 @@ This app includes following APIs:
 **For Frontend help see page**
 
 login-logout-jwt-nodejs/public/ProfilePhotoDir/test.html
+
+**App Execution**
+- `node index.js`
