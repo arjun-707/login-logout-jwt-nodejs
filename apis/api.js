@@ -96,7 +96,6 @@ expRoute.post('/login', (req, res, next) => {
 })
 expRoute.get('/logout', exporter.authenticateToken, (req, res) => {
     let param = req.bearerToken
-    console.log(param)
     if (typeof param == 'string' && param.length > 0) {
         exporter.setHashKeyValuesIntoRedis('expired_token', [param, true])
         .then(() => {
