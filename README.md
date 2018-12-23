@@ -1,7 +1,7 @@
 
 ## Login-logout Using passport and JWT in NodeJS ##
 
-###### Description
+## Description
 This module is a common module for a website. As we all know that a website has: user registration, login, logout, password reset, etc sections.
 
 This app includes following APIs:
@@ -14,16 +14,16 @@ This app includes following APIs:
 
 Note : There is a cron which will continously verify the token stored in redis using JWT verify function. Open new tab in your terminal and travel to the directory 'login-logout-jwt-nodejs' and run `nodemon services/token-refresh.js`
 
-###### Requirements
+## Requirements
 - MongoDB (3*)
 - Redis
 - NodeJS (10*)
 
-###### Do following things before running the app
+## Do following things before running the app
 - make a Database (`auth`) in MongoDB
 - Setup your config as required (`configs/config.json`)
 - run command `npm install` to install all the dependencies
 - install nodemon globally if you want to run your app on `watch` (`npm install -g nodemon`)
 
-###### For Frontend help see page
+## For Frontend help see page
 login-logout-jwt-nodejs/public/ProfilePhotoDir/test.html
