@@ -60,7 +60,7 @@ This app includes following APIs:
 
 **Requirements**
 - MongoDB (3*)
-- Redis
+- <a href="https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-redis-on-ubuntu-16-04">Redis</a>
 - NodeJS (10*)
 
 **Do following things before running the app**
