@@ -13,15 +13,15 @@ let exporter = process.exporter;
             if (redisTokendata && exporter.isObjectValid(redisTokendata) && Object.keys(redisTokendata).length > 0) {
                 console.log(`token found...`)
                 for (let key in redisTokendata) {
-                    if (redisTokendata[key] == 'true') {
-                        jwt.verify(key, process.CONFIG.jwt.token.activated, (err, data) => {
+                    if (redisTokendata[key]) {
+                        jwt.verify(key, redisTokendata[key], (err, data) => {
                             if (err) {
                                 exporter.deleteHashKeyValuesIntoRedis('expired_token', key)
                                 .then(() => {
-                                    exporter.logNow(`Token expired : ${key}, activated secret : ${process.CONFIG.jwt.token.activated}`)
+                                    exporter.logNow(`Token expired : ${key}, activated secret : ${redisTokendata[key]}`, 'token')
                                 })
                                 .catch((redisTokenError) => {
-                                    exporter.logNow(`Token expired Error: ${redisTokenError}, Token expired : ${key}, activated secret : ${process.CONFIG.jwt.token.activated}`)
+                                    exporter.logNow(`Token expired Error: ${redisTokenError}, Token expired : ${key}, activated secret : ${redisTokendata[key]}`)
                                 })
                             }
                             else

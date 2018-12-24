@@ -2,7 +2,7 @@ const passport = require('passport')
 const request = require('request')
 const expRoute = require('express').Router();
 let exporter = process.exporter;
-
+exporter.logNow('test')
 expRoute.post('/register', (req, res) => {
     let param = req.body 
     param = JSON.stringify(param) === JSON.stringify({}) ? req.query : param
@@ -95,17 +95,17 @@ expRoute.post('/login', (req, res, next) => {
     )(req, res, next);
 })
 expRoute.get('/logout', exporter.authenticateToken, (req, res) => {
-    let param = req.bearerToken
-    console.log(param)
-    if (typeof param == 'string' && param.length > 0) {
-        exporter.setHashKeyValuesIntoRedis('expired_token', [param, true])
+    let token = req.jwtToken.token
+    let secret = req.jwtToken.secret
+    if (typeof token == 'string' && typeof secret == 'string') {
+        exporter.setHashKeyValuesIntoRedis('expired_token', [token, secret])
         .then(() => {
             res.status(200).json({
                 msg: 'logged out'
             })
         })
         .catch((redisErr) => {
-            exporter.logNow(`Redis Set Error: ${redisErr} , ${param}`)
+            exporter.logNow(`Redis Set Error: ${redisErr} , Token: ${token} , Secret: ${secret}`)
             res.status(400).json({
                 msg: 'unable to logout'
             })
@@ -150,7 +150,8 @@ expRoute.get('/view', exporter.authenticateToken, (req, res) => {
 })
 expRoute.post('/set-pwd', exporter.authenticateToken, (req, res) => {
     let param = req.finalTokenExtractedData
-    if (param && exporter.isObjectValid(param, 'tokenId', true, true)) {
+    let token = req.jwtToken.token
+    if (param && exporter.isObjectValid(param, 'tokenId', true, true) && typeof token == 'string') {
         exporter.createPassword(req.body.password) // create new hash password
         .then((hash) => {
             let options = {
@@ -162,13 +163,11 @@ expRoute.post('/set-pwd', exporter.authenticateToken, (req, res) => {
                     uri: req.protocol + '://' + req.get('host') + '/' + process.logoutURL,
                     method: 'GET',
                     headers: {
-                        'authorization': 'bearer '+req.bearerToken
+                        'authorization': 'bearer '+token
                     }
                 }
-                
                 request(clientServerOptions, (err, response) => {
-                    if (err) {
-                        console.log(err)
+                    if (err || response.statusCode != 200) {
                         res.status(400).json({
                             result: {
                                 email: data.email
