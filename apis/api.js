@@ -2,7 +2,7 @@ const passport = require('passport')
 const request = require('request')
 const expRoute = require('express').Router();
 let exporter = process.exporter;
-exporter.logNow('test')
+
 expRoute.post('/register', (req, res) => {
     let param = req.body 
     param = JSON.stringify(param) === JSON.stringify({}) ? req.query : param
