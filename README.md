@@ -3,7 +3,7 @@
 
 **Description**
 
-This module is a common module for a website. As we all know that a website has: user registration, login, logout, password reset, etc sections.
+This module is a common module for any website. As we all know that a website has: user registration, login, logout, password reset, etc sections.
 
 This app includes following APIs:
 - **user registration** `http://localhost:3000/user/register`: This will require data in POST request
