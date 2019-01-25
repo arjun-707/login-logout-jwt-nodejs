@@ -1,5 +1,5 @@
 
-## Login-logout Using passport and JWT in NodeJS ##
+## API based Login-logout Using passport and JWT in NodeJS ##
 
 **Description**
 
